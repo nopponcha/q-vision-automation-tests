@@ -1,9 +1,13 @@
 name: Robot Framework Automated API Tests
 
 on:
+  # 1. รันอัตโนมัติเมื่อ n8n push ไฟล์ใหม่เข้าโฟลเดอร์ tests
   push:
     paths:
-      - 'tests/**'  # ให้รันเฉพาะเมื่อมีการอัปเดตไฟล์ในโฟลเดอร์ tests
+      - 'tests/**'
+  
+  # 2. เปิดให้กดรันเองได้แบบ Manual จากหน้า GitHub Actions
+  workflow_dispatch:
 
 jobs:
   test:
@@ -20,15 +24,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install robotframework robotframework-requests
 
       - name: Run Robot Framework Tests
         run: |
-          # สั่งให้รันทุกไฟล์ .robot ที่อยู่ในโฟลเดอร์ tests
+          # สั่งรันไฟล์ .robot ทั้งหมดในโฟลเดอร์ tests และเก็บผลลัพธ์ไว้ที่โฟลเดอร์ results
           robot -d results tests/**/*.robot
 
       - name: Upload Test Results
-        if: always()
+        if: always() # ให้ทำงานเสมอไม่ว่าเทสจะผ่านหรือพัง
         uses: actions/upload-artifact@v3
         with:
           name: robot-test-results
