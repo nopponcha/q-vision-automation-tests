@@ -1,12 +1,9 @@
 name: Robot Framework Automated API Tests
 
 on:
-  # 1. รันอัตโนมัติเมื่อ n8n push ไฟล์ใหม่เข้าโฟลเดอร์ tests
   push:
     paths:
       - 'tests/**'
-  
-  # 2. เปิดให้กดรันเองได้แบบ Manual จากหน้า GitHub Actions
   workflow_dispatch:
 
 jobs:
@@ -15,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # อัปเกรดเป็น v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # อัปเกรดเป็น v5 เพื่อความใหม่ล่าสุด
         with:
           python-version: '3.10'
 
@@ -29,12 +26,13 @@ jobs:
 
       - name: Run Robot Framework Tests
         run: |
-          # สั่งรันไฟล์ .robot ทั้งหมดในโฟลเดอร์ tests และเก็บผลลัพธ์ไว้ที่โฟลเดอร์ results
+          # ตรวจสอบว่ามีโฟลเดอร์ tests จริงไหมก่อนรัน เพื่อป้องกัน Error
+          mkdir -p results
           robot -d results tests/**/*.robot
 
       - name: Upload Test Results
-        if: always() # ให้ทำงานเสมอไม่ว่าเทสจะผ่านหรือพัง
-        uses: actions/upload-artifact@v3
+        if: always() 
+        uses: actions/upload-artifact@v4 # อัปเกรดเป็น v4 ตามที่ GitHub แจ้งเตือน
         with:
           name: robot-test-results
           path: results/
