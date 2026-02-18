@@ -5,7 +5,7 @@ Suite Setup    Initialize API Session
 Suite Teardown    Close All Sessions
 
 ***Variables***
-${BASE_URL}    http://localhost:3000
+${BASE_URL}    git clone https://github.com/nopponcha/q-vision-automation-tests.git
 ${HEADERS}    ${EMPTY}
 
 ***Keywords***
