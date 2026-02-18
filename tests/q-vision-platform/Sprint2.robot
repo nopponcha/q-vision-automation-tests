@@ -5,7 +5,7 @@ Suite Setup    Initialize API Session
 Suite Teardown    Close All Sessions
 
 ***Variables***
-${BASE_URL}    git clone https://github.com/nopponcha/q-vision-automation-tests.git
+${BASE_URL}    https://339a-49-237-7-174.ngrok-free.app
 ${HEADERS}    ${EMPTY}
 
 ***Keywords***
