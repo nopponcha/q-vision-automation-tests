@@ -6,7 +6,7 @@ Test Setup    Create API Session
 Test Teardown    Close All Sessions
 
 *** Variables ***
-${BASE_URL}    http://localhost:8000
+${BASE_URL}    https://f189-49-237-45-161.ngrok-free.app
 &{HEADERS}    Content-Type=application/json
 
 *** Test Cases ***
