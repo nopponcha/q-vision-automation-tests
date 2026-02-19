@@ -5,7 +5,7 @@ Suite Setup    Create HTTP Session
 Test Teardown    Delete All Sessions
 
 *** Variables ***
-${BASE_URL}    http://your-api-host:port  # IMPORTANT: Update with your actual API base URL
+${BASE_URL}   https://d3a0-49-237-45-161.ngrok-free.app  # IMPORTANT: Update with your actual API base URL
 &{HEADERS}    Content-Type=application/json
 
 *** Test Cases ***
