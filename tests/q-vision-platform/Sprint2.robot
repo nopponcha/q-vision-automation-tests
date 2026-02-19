@@ -3,7 +3,7 @@ Library    RequestsLibrary
 Library    Collections
 
 *** Variables ***
-${BASE_URL}    http://your-q-vision-platform-api.com
+${BASE_URL}    https://d3a0-49-237-45-161.ngrok-free.app
 &{HEADERS}    Content-Type=application/json
 
 *** Test Cases ***
