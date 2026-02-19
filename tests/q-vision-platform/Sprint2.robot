@@ -3,7 +3,7 @@ Library    RequestsLibrary
 Library    Collections
 
 *** Variables ***
-${BASE_URL}          https://4ada-49-237-23-111.ngrok-free.app
+${BASE_URL}          https://7d8a-49-237-45-161.ngrok-free.app
 ${SESSION_ALIAS}     q-vision-platform_api
 # ประกาศ Headers เป็น Global Variable แบบ Dictionary
 &{GLOBAL_HEADERS}    Content-Type=application/json
