@@ -3,7 +3,7 @@ Library    RequestsLibrary
 Library    Collections
 
 ***Variables***
-${BASE_URL}          http://localhost:3000
+${BASE_URL}          https://4ada-49-237-23-111.ngrok-free.app
 ${SESSION_ALIAS}     q-vision-platform_api
 
 ***Keywords***
