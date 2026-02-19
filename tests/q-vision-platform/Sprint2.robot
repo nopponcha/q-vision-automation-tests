@@ -6,7 +6,7 @@ Test Setup    Create HTTP Session for API
 Test Teardown    Delete All Sessions
 
 ***Variables***
-${BASE_URL}             https://f189-49-237-45-161.ngrok-free.app    # Update this with your actual API base URL
+${BASE_URL}             https://d3a0-49-237-45-161.ngrok-free.app    # Update this with your actual API base URL
 ${SESSION_ALIAS}        q-vision-api
 &{HEADERS}              Content-Type=application/json
 
