@@ -22,18 +22,39 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install robotframework robotframework-requests
-          # เปลี่ยนมาใช้ตัวนี้ครับ เป็นตัวมาตรฐาน
-          pip install robotframework-influxdb-listener
+          pip install robotframework robotframework-requests requests
 
-      - name: Run Robot Framework Tests with Listener
+      - name: Create Custom InfluxDB Listener
+        run: |
+          cat <<EOF > influx_listener.py
+          import requests
+          import time
+
+          class influx_listener:
+              ROBOT_LISTENER_API_VERSION = 2
+
+              def __init__(self, url, token, org, bucket):
+                  self.url = f"{url}/api/v2/write?org={org}&bucket={bucket}&precision=s"
+                  self.headers = {"Authorization": f"Token {token}", "Content-Type": "text/plain; charset=utf-8"}
+
+              def end_test(self, name, attrs):
+                  status = 1 if attrs['status'] == 'PASS' else 0
+                  duration = attrs['elapsedtime'] / 1000.0
+                  # Line Protocol format
+                  data = f"test_cases,test_name={name.replace(' ', '_')},project=ecommerce status={status},duration={duration}"
+                  try:
+                      requests.post(self.url, headers=self.headers, data=data, timeout=5)
+                  except Exception as e:
+                      print(f"Failed to send data to InfluxDB: {e}")
+          EOF
+
+      - name: Run Robot Framework Tests
         run: |
           mkdir -p results
-          # ใช้ Listener เชื่อมต่อกับ Ngrok URL ของคุณ
-          # รูปแบบ: --listener InfluxDBListener:<URL>:<Token>:<Org>:<Bucket>
-          # เพิ่ม Metadata เพื่อให้แยกการรันแต่ละครั้งใน Grafana ได้ง่าย
+          # เรียกใช้ Custom Listener ที่สร้างขึ้นมา (ระบุ URL, Token, Org, Bucket)
+          # **อย่าลืมเปลี่ยน admin:password1234 เป็น Token จริงจาก InfluxDB UI นะครับ**
           robot -d results \
-          --listener "InfluxDBListener:https://a0a7-131-229-247-58.ngrok-free.app:admin:password1234:my-org:robot-metrics" \
+          --listener "influx_listener.py:https://a0a7-131-229-247-58.ngrok-free.app:admin:password1234:my-org:robot-metrics" \
           tests/**/*.robot
 
       - name: Upload Test Results
