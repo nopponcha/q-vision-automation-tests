@@ -5,7 +5,7 @@ Suite Setup    Create Session    mysession    ${BASE_URL}
 Suite Teardown    Delete All Sessions
 
 *** Variables ***
-${BASE_URL}    https://d3a0-49-237-45-161.ngrok-free.app
+${BASE_URL}    https://bargains-typing-trio-alfred.trycloudflare.com
 &{HEADERS}    Content-Type=application/json
 
 *** Test Cases ***
