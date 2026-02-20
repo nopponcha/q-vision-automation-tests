@@ -51,10 +51,9 @@ jobs:
       - name: Run Robot Framework Tests
         run: |
           mkdir -p results
-          # เรียกใช้ Custom Listener ที่สร้างขึ้นมา (ระบุ URL, Token, Org, Bucket)
-          # **อย่าลืมเปลี่ยน admin:password1234 เป็น Token จริงจาก InfluxDB UI นะครับ**
+          # ใช้เครื่องหมาย ; แทน : ในการส่ง arguments ให้ listener
           robot -d results \
-          --listener "influx_listener.py:https://a0a7-131-229-247-58.ngrok-free.app:admin:password1234:my-org:robot-metrics" \
+          --listener "influx_listener.py;https://a0a7-131-229-247-58.ngrok-free.app;-5BwTjLE1hJxif2RJbjuuiBt_W0q1_cWP9CI5AZcp9CwY595hXVHF7O-hA8gpzbO6wW7m54KkIVSdZ2-sy7IyA==;my-org;robot-metrics" \
           tests/**/*.robot
 
       - name: Upload Test Results

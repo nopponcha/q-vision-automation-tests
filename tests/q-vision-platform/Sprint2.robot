@@ -5,7 +5,7 @@ Suite Setup    Create Session    mysession    ${BASE_URL}
 Suite Teardown    Delete All Sessions
 
 *** Variables ***
-${BASE_URL}    https://bargains-typing-trio-alfred.trycloudflare.com
+${BASE_URL}    https://synthesis-birthday-demo-volvo.trycloudflare.com
 &{HEADERS}    Content-Type=application/json
 
 *** Test Cases ***
