@@ -4,7 +4,7 @@ Library    Collections
 # No need for OperatingSystem as 'json' module is available for Evaluate directly.
 
 *** Variables ***
-${BASE_URL}    http://localhost:8000
+${BASE_URL}    https://merely-bodies-moments-sand.trycloudflare.com
 &{HEADERS}     Content-Type=application/json
 ${API_SESSION_ALIAS}    q-vision-api
 
