@@ -9,7 +9,6 @@ ${BASE_URL}    https://merely-bodies-moments-sand.trycloudflare.com
 
 *** Keywords ***
 Create API Session
-    Log To Console    
     Log To Console    -- Starting Test Session --
     Log To Console    Creating API session with base URL: ${BASE_URL}
     Create Session    mysession    ${BASE_URL}    verify=${FALSE}
