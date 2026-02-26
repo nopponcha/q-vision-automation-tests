@@ -2,36 +2,43 @@
 Library    RequestsLibrary
 Library    Collections
 
+Suite Setup    Create HTTP Session
+
 ***Variables***
-${BASE_URL}    https://3e1f-49-237-40-185.ngrok-free.app
-&{HEADERS}     Content-Type=application/json
+${BASE_URL}    https://foam-lee-herald-scotia.trycloudflare.com
+&{HEADERS}    Content-Type=application/json
 
 ***Keywords***
-Create HTTP Session for Q-Vision Platform
-    Create Session    q-vision-platform    ${BASE_URL}    headers=${HEADERS}    verify=${FALSE}
-    Log To Console    HTTP session 'q-vision-platform' created with base URL: ${BASE_URL}
+Create HTTP Session
+    [Documentation]    Creates a new HTTP session with the base URL and specified headers.
+    Create Session    api_session    ${BASE_URL}    headers=${HEADERS}    verify=${FALSE}
+    Log To Console    Session 'api_session' created with URL: ${BASE_URL}
+    Log To Console    Using headers: ${HEADERS}
 
 ***Test Cases***
 Ingest PASSED Report
-    [Setup]    Create HTTP Session for Q-Vision Platform
-    Log To Console    1. Sending POST request to ingest quality report for 'E-Commerce' project in 'Sprint2'.
-    ${payload}=    Create Dictionary
+    [Documentation]    Test case to ingest a quality report with PASSED status.
+    Log To Console    Starting Test: Ingest PASSED Report
+
+    Log To Console    Constructing payload for the ingest API.
+    &{payload}=    Create Dictionary
     ...    projectName=E-Commerce
     ...    sprintName=Sprint2
     ...    featureName=Login
-    ...    passed=${99}
-    ...    failed=${1}
-    ...    duration=${10}
-    Log To Console    Payload prepared: ${payload}
-    ${response}=    POST On Session
-    ...    q-vision-platform
-    ...    /api/v1/quality-reports/ingest
-    ...    json=${payload}
-    ...    headers=${HEADERS}
-    ...    verify=${FALSE}
-    Log To Console    Received response status: ${response.status_code}
-    Log To Console    Received response body: ${response.text}
-    Log To Console    2. Checking HTTP status code is 201.
+    ...    passed=100
+    ...    failed=0
+    ...    duration=1
+
+    Log To Console    Sending POST request to /api/v1/quality-reports/ingest
+    ${response}=    POST On Session    api_session    /api/v1/quality-reports/ingest    json=${payload}
+
+    Log To Console    Response Status Code: ${response.status_code}
+    Log To Console    Response Body: ${response.text}
+
+    Log To Console    Verifying response status code is 201.
     Should Be Equal As Strings    ${response.status_code}    201
-    Log To Console    3. Verifying the response body contains 'PASSED' status.
+
+    Log To Console    Verifying response body contains 'PASSED'.
     Should Contain    ${response.text}    PASSED
+
+    Log To Console    Test Completed: Ingest PASSED Report
