@@ -5,7 +5,7 @@ Library    Collections
 Suite Setup    Create HTTP Session
 
 ***Variables***
-${BASE_URL}    https://fly-powell-firm-offline.trycloudflare.com
+${BASE_URL}    https://b88e-49-237-40-185.ngrok-free.app
 &{HEADERS}     Content-Type=application/json
 
 ***Keywords***
