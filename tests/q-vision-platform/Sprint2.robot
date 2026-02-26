@@ -3,7 +3,7 @@ Library    RequestsLibrary
 Library    Collections
 
 ***Variables***
-${BASE_URL}    https://dressing-engineers-findarticles-cold.trycloudflare.com
+${BASE_URL}    https://3e1f-49-237-40-185.ngrok-free.app
 &{HEADERS}     Content-Type=application/json
 
 ***Keywords***
