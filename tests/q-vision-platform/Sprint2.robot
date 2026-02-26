@@ -1,70 +1,77 @@
 ***Settings***
 Library    RequestsLibrary
 Library    Collections
-Test Setup    Create HTTP Session
+
+Suite Setup    Create API Session
 
 ***Variables***
-${BASE_URL}     https://fly-powell-firm-offline.trycloudflare.com
-&{HEADERS}      Content-Type=application/json
+${BASE_URL}    https://9942-49-237-40-185.ngrok-free.app
+&{HEADERS}     Content-Type=application/json
 
 ***Keywords***
-Create HTTP Session
-    Log To Console    Creating HTTP session with Base URL: ${BASE_URL}
-    Create Session    q-vision-api    ${BASE_URL}    headers=${HEADERS}    verify=${FALSE}
-    Log To Console    HTTP session 'q-vision-api' created successfully.
+Create API Session
+    Log To Console    Establishing API session for ${BASE_URL}
+    Create Session    q_vision_platform    ${BASE_URL}    headers=${HEADERS}    verify=${FALSE}
+    Log To Console    API session 'q_vision_platform' created successfully.
 
-Create Ingest Report Payload
-    [Arguments]    ${projectName}    ${sprintName}    ${featureName}    ${passed}    ${failed}    ${duration}
-    Log To Console    Preparing payload for Project: ${projectName}, Sprint: ${sprintName}
-    ${payload}=    Create Dictionary
-    ...    projectName=${projectName}
-    ...    sprintName=${sprintName}
-    ...    featureName=${featureName}
-    ...    passed=${passed}
-    ...    failed=${failed}
-    ...    duration=${duration}
-    [Return]    ${payload}
-
-Verify API Response
-    [Arguments]    ${response}    ${expected_status}    ${expected_result_value}
-    Log To Console    Verifying API response status code and content.
-    Should Be Equal As Strings    ${response.status_code}    ${expected_status}
-    Log To Console    Response Status Code: ${response.status_code}
-    Log To Console    Response Text: ${response.text}
+Perform POST Request And Verify Response
+    [Arguments]    ${endpoint}    ${payload_dict}    ${expected_status}    ${expected_result_value}
+    Log To Console    Sending POST request to endpoint: ${endpoint}
+    Log To Console    Request payload: ${payload_dict}
+    ${response}=    POST On Session    q_vision_platform    ${endpoint}    json=${payload_dict}    expected_status=${expected_status}
+    Log To Console    Received response with status code: ${response.status_code}
+    Log To Console    Response body: ${response.text}
+    Status Should Be    ${expected_status}    ${response}
     Should Contain    ${response.text}    ${expected_result_value}
-    Log To Console    Response contains expected value: ${expected_result_value}
+    Log To Console    Assertion passed: Response body contains value '${expected_result_value}'.
+
+Perform GET Request And Verify Negative Response
+    [Arguments]    ${endpoint}    ${expected_status}    ${expected_result_value}
+    Log To Console    Sending GET request to endpoint: ${endpoint}
+    ${response}=    GET On Session    q_vision_platform    ${endpoint}    expected_status=any
+    Log To Console    Received response with status code: ${response.status_code}
+    Log To Console    Response body: ${response.text}
+    Status Should Be    ${expected_status}    ${response}
+    Should Contain    ${response.text}    ${expected_result_value}
+    Log To Console    Assertion passed: Response body contains value '${expected_result_value}'.
 
 ***Test Cases***
-Ingest PASSED Report
-    Log To Console    --- Starting Test Case: Ingest PASSED Report ---
-    ${endpoint}=    Set Variable    /api/v1/quality-reports/ingest
-    Log To Console    Sending POST request to endpoint: ${endpoint}
-    ${payload}=    Create Ingest Report Payload
+TC_QVP_S2_001_Ingest_PASSED_Report
+    Log To Console    Test Case: Ingest PASSED Report - Verifying successful ingestion of a passed quality report.
+    ${payload}=    Create Dictionary
     ...    projectName=E-Commerce
     ...    sprintName=Sprint2
     ...    featureName=Login
-    ...    passed=90
-    ...    failed=1
-    ...    duration=1
-    Log To Console    Payload for PASSED report created.
-    ${response}=    POST On Session    q-vision-api    ${endpoint}    json=${payload}
-    Log To Console    POST request sent for PASSED report.
-    Verify API Response    ${response}    201    PASSED
-    Log To Console    --- Finished Test Case: Ingest PASSED Report ---
+    ...    passed=${100}
+    ...    failed=${0}
+    ...    duration=${1}
+    Perform POST Request And Verify Response
+    ...    /api/v1/quality-reports/ingest
+    ...    ${payload}
+    ...    201
+    ...    PASSED
+    Log To Console    Test case TC_QVP_S2_001_Ingest_PASSED_Report finished.
 
-Ingest FAILED Report
-    Log To Console    --- Starting Test Case: Ingest FAILED Report ---
-    ${endpoint}=    Set Variable    /api/v1/quality-reports/ingest
-    Log To Console    Sending POST request to endpoint: ${endpoint}
-    ${payload}=    Create Ingest Report Payload
+TC_QVP_S2_002_Ingest_FAILED_Report
+    Log To Console    Test Case: Ingest FAILED Report - Verifying successful ingestion of a failed quality report.
+    ${payload}=    Create Dictionary
     ...    projectName=E-Commerce
     ...    sprintName=Sprint2
     ...    featureName=Payment
-    ...    passed=90
-    ...    failed=10
-    ...    duration=20.0
-    Log To Console    Payload for FAILED report created.
-    ${response}=    POST On Session    q-vision-api    ${endpoint}    json=${payload}
-    Log To Console    POST request sent for FAILED report.
-    Verify API Response    ${response}    201    FAILED
-    Log To Console    --- Finished Test Case: Ingest FAILED Report ---
+    ...    passed=${10}
+    ...    failed=${90}
+    ...    duration=${20.0}
+    Perform POST Request And Verify Response
+    ...    /api/v1/quality-reports/ingest
+    ...    ${payload}
+    ...    201
+    ...    FAILED
+    Log To Console    Test case TC_QVP_S2_002_Ingest_FAILED_Report finished.
+
+TC_QVP_S2_003_Checking_Missing_API
+    Log To Console    Test Case: Checking Missing API - Verifying 404 Not Found for a non-existent endpoint.
+    Perform GET Request And Verify Negative Response
+    ...    /api/v1/quality-reportsss
+    ...    404
+    ...    Not Found
+    Log To Console    Test case TC_QVP_S2_003_Checking_Missing_API finished.
