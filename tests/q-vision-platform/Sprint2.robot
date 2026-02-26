@@ -1,7 +1,7 @@
 ***Settings***
 Library    RequestsLibrary
 Library    Collections
-#Suite Setup    Create HTTP Session
+Suite Setup    Create HTTP Session
 
 ***Variables***
 ${BASE_URL}    https://uri-angeles-reserves-rica.trycloudflare.com
