@@ -6,7 +6,7 @@ Suite Setup    Setup Test Environment
 
 *** Variables ***
 &{HEADERS}    Content-Type=application/json
-${BASE_URL}    https://loops-arm-kim-twins.trycloudflare.com
+${BASE_URL}    https://f4a8-49-237-92-243.ngrok-free.app
 
 *** Keywords ***
 Setup Test Environment
