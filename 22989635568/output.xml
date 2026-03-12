@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.10.19 on linux)" generated="2026-03-12T06:32:42.749867" rpa="false" schemaversion="5">
+<suite id="s1" name="Sprint2" source="/home/runner/work/q-vision-automation-tests/q-vision-automation-tests/tests/q-vision-platform/Sprint2.robot">
+<kw name="Setup Test Environment" type="SETUP">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Setting up test environment and creating HTTP session.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:42.866394" elapsed="0.000413"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<arg>urllib3.disable_warnings()</arg>
+<arg>modules=urllib3</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-03-12T06:32:42.867065" elapsed="0.000440"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2026-03-12T06:32:42.867994" level="INFO">Creating Session using : alias=mysession, url=https://f4a8-49-237-92-243.ngrok-free.app, headers={'Content-Type': 'application/json'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>mysession</arg>
+<arg>${BASE_URL}</arg>
+<arg>headers=${HEADERS}</arg>
+<arg>verify=${FALSE}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2026-03-12T06:32:42.867640" elapsed="0.000584"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>HTTP session 'mysession' created with base URL: ${BASE_URL}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:42.868358" elapsed="0.000321"/>
+</kw>
+<status status="PASS" start="2026-03-12T06:32:42.865809" elapsed="0.003011"/>
+</kw>
+<test id="s1-t1" name="Ingest PASSED Report" line="30">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Starting Test Case: Ingest PASSED Report</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:42.869329" elapsed="0.000287"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-12T06:32:42.871085" level="INFO">${payload} = {'projectName': 'E-Commerce', 'sprintName': 'Sprint2', 'featureName': 'Login', 'passed': 100, 'failed': 0, 'duration': 15.5}</msg>
+<var>${payload}</var>
+<arg>projectName=E-Commerce</arg>
+<arg>sprintName=Sprint2</arg>
+<arg>featureName=Login</arg>
+<arg>passed=${100}</arg>
+<arg>failed=${0}</arg>
+<arg>duration=${15.5}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-12T06:32:42.869818" elapsed="0.001306"/>
+</kw>
+<kw name="Perform POST Request And Verify Response">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Sending POST request to ${endpoint} with payload: ${payload_dict}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:42.871708" elapsed="0.000398"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-12T06:32:43.513579" level="INFO">POST Request : url=https://f4a8-49-237-92-243.ngrok-free.app/api/v1/quality-reports/ingest 
+ path_url=/api/v1/quality-reports/ingest 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '124'} 
+ body=b'{"projectName": "E-Commerce", "sprintName": "Sprint2", "featureName": "Login", "passed": 100, "failed": 0, "duration": 15.5}' 
+ </msg>
+<msg time="2026-03-12T06:32:43.513718" level="INFO">POST Response : url=https://f4a8-49-237-92-243.ngrok-free.app/api/v1/quality-reports/ingest 
+ status=201, reason=Created 
+ headers={'Access-Control-Allow-Origin': '*', 'Content-Length': '196', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Thu, 12 Mar 2026 06:32:43 GMT', 'Etag': 'W/"c4-QFfmVL9W3R/071W2b+j7x73GnVA"', 'Ngrok-Agent-Ips': '49.237.92.243', 'X-Powered-By': 'Express'} 
+ body={"id":121,"projectName":"E-Commerce","featureName":"Login","sprintName":"Sprint2","passed":100,"failed":0,"duration":15.5,"status":"PASSED","reportUrl":null,"createdAt":"2026-03-12T06:32:43.355Z"} 
+ </msg>
+<msg time="2026-03-12T06:32:43.513890" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>${endpoint}</arg>
+<arg>json=${payload_dict}</arg>
+<arg>headers=${HEADERS}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-12T06:32:42.872289" elapsed="0.641639"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Received response status: ${response.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.514174" elapsed="0.000770"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Received response text: ${response.text}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.515145" elapsed="0.000667"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<msg time="2026-03-12T06:32:43.516676" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>${expected_status}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.516009" elapsed="0.000744"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Response status code is as expected: ${expected_status}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.516876" elapsed="0.000366"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${response.text}</arg>
+<arg>${expected_content_value}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.517429" elapsed="0.000879"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Response content contains expected value: ${expected_content_value}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.518436" elapsed="0.000334"/>
+</kw>
+<arg>/api/v1/quality-reports/ingest</arg>
+<arg>${payload}</arg>
+<arg>201</arg>
+<arg>PASSED</arg>
+<status status="PASS" start="2026-03-12T06:32:42.871347" elapsed="0.647559"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Test Case 'Ingest PASSED Report' Completed.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.519096" elapsed="0.000284"/>
+</kw>
+<status status="PASS" start="2026-03-12T06:32:42.868934" elapsed="0.650658"/>
+</test>
+<test id="s1-t2" name="Ingest FAILED Report" line="46">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Starting Test Case: Ingest FAILED Report</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.682129" elapsed="0.000369"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2026-03-12T06:32:43.683836" level="INFO">${payload} = {'projectName': 'E-Commerce', 'sprintName': 'Sprint2', 'featureName': 'Payment', 'passed': 10, 'failed': 90, 'duration': 20.0}</msg>
+<var>${payload}</var>
+<arg>projectName=E-Commerce</arg>
+<arg>sprintName=Sprint2</arg>
+<arg>featureName=Payment</arg>
+<arg>passed=${10}</arg>
+<arg>failed=${90}</arg>
+<arg>duration=${20.0}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.682719" elapsed="0.001154"/>
+</kw>
+<kw name="Perform POST Request And Verify Response">
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Sending POST request to ${endpoint} with payload: ${payload_dict}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.684485" elapsed="0.000367"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2026-03-12T06:32:43.972852" level="INFO">POST Request : url=https://f4a8-49-237-92-243.ngrok-free.app/api/v1/quality-reports/ingest 
+ path_url=/api/v1/quality-reports/ingest 
+ headers={'User-Agent': 'python-requests/2.32.5', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '126'} 
+ body=b'{"projectName": "E-Commerce", "sprintName": "Sprint2", "featureName": "Payment", "passed": 10, "failed": 90, "duration": 20.0}' 
+ </msg>
+<msg time="2026-03-12T06:32:43.973006" level="INFO">POST Response : url=https://f4a8-49-237-92-243.ngrok-free.app/api/v1/quality-reports/ingest 
+ status=201, reason=Created 
+ headers={'Access-Control-Allow-Origin': '*', 'Content-Length': '196', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Thu, 12 Mar 2026 06:32:43 GMT', 'Etag': 'W/"c4-5z7fjUFBzmcC857t1xgt7kKl0wk"', 'Ngrok-Agent-Ips': '49.237.92.243', 'X-Powered-By': 'Express'} 
+ body={"id":122,"projectName":"E-Commerce","featureName":"Payment","sprintName":"Sprint2","passed":10,"failed":90,"duration":20,"status":"FAILED","reportUrl":null,"createdAt":"2026-03-12T06:32:43.827Z"} 
+ </msg>
+<msg time="2026-03-12T06:32:43.973136" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>${endpoint}</arg>
+<arg>json=${payload_dict}</arg>
+<arg>headers=${HEADERS}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.685057" elapsed="0.288114"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Received response status: ${response.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.973312" elapsed="0.000636"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Received response text: ${response.text}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.974150" elapsed="0.000626"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<msg time="2026-03-12T06:32:43.975561" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>${expected_status}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.974942" elapsed="0.000691"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Response status code is as expected: ${expected_status}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.975755" elapsed="0.000360"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${response.text}</arg>
+<arg>${expected_content_value}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.976303" elapsed="0.000694"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Response content contains expected value: ${expected_content_value}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.977127" elapsed="0.000314"/>
+</kw>
+<arg>/api/v1/quality-reports/ingest</arg>
+<arg>${payload}</arg>
+<arg>201</arg>
+<arg>FAILED</arg>
+<status status="PASS" start="2026-03-12T06:32:43.684123" elapsed="0.293450"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Test Case 'Ingest FAILED Report' Completed.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-03-12T06:32:43.977754" elapsed="0.000302"/>
+</kw>
+<status status="PASS" start="2026-03-12T06:32:43.681687" elapsed="0.296573"/>
+</test>
+<status status="PASS" start="2026-03-12T06:32:42.815422" elapsed="1.301070"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Sprint2" id="s1" pass="2" fail="0" skip="0">Sprint2</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
