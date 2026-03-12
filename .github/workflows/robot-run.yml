@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # ต้องเปิดสิทธิ์เพื่อให้เขียนลง gh-pages ได้
 
     steps:
       - name: Checkout code
@@ -28,20 +30,21 @@ jobs:
         run: |
           cat <<EOF > influx_listener.py
           import requests
-          import time
+          import sys
 
           class influx_listener:
               ROBOT_LISTENER_API_VERSION = 2
 
-              def __init__(self, url, token, org, bucket):
+              def __init__(self, url, token, org, bucket, report_url):
                   self.url = f"{url}/api/v2/write?org={org}&bucket={bucket}&precision=s"
                   self.headers = {"Authorization": f"Token {token}", "Content-Type": "text/plain; charset=utf-8"}
+                  self.report_url = report_url # รับค่า URL ที่ส่งมาจาก Workflow
 
               def end_test(self, name, attrs):
                   status = 1 if attrs['status'] == 'PASS' else 0
                   duration = attrs['elapsedtime'] / 1000.0
-                  # Line Protocol format
-                  data = f"test_cases,test_name={name.replace(' ', '_')},project=ecommerce status={status},duration={duration}"
+                  # เพิ่ม reportUrl เข้าไปใน Line Protocol (สังเกตเครื่องหมาย " ครอบ URL)
+                  data = f'test_cases,test_name={name.replace(" ", "_")},project=ecommerce status={status},duration={duration},reportUrl="{self.report_url}"'
                   try:
                       requests.post(self.url, headers=self.headers, data=data, timeout=5)
                   except Exception as e:
@@ -51,9 +54,14 @@ jobs:
       - name: Run Robot Framework Tests
         run: |
           mkdir -p results
-          # ใช้เครื่องหมาย ; แทน : ในการส่ง arguments ให้ listener
+          # สร้าง URL ล่วงหน้าโดยใช้ github.run_id
+          FINAL_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ github.run_id }}/log.html"
+          
+          echo "Test Report will be available at: $FINAL_URL"
+
+          # ส่ง FINAL_URL เข้าไปเป็น argument ตัวสุดท้ายของ listener
           robot -d results \
-          --listener "influx_listener.py;https://a0a7-131-229-247-58.ngrok-free.app;-5BwTjLE1hJxif2RJbjuuiBt_W0q1_cWP9CI5AZcp9CwY595hXVHF7O-hA8gpzbO6wW7m54KkIVSdZ2-sy7IyA==;my-org;robot-metrics" \
+          --listener "influx_listener.py;https://a0a7-131-229-247-58.ngrok-free.app;-5BwTjLE1hJxif2RJbjuuiBt_W0q1_cWP9CI5AZcp9CwY595hXVHF7O-hA8gpzbO6wW7m54KkIVSdZ2-sy7IyA==;my-org;robot-metrics;$FINAL_URL" \
           tests/**/*.robot
 
       - name: Deploy Test Results to GitHub Pages
@@ -62,8 +70,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./results
-          destination_dir: ${{ github.run_id }} # เก็บแยกโฟลเดอร์ตาม ID ครั้งที่รัน
-          keep_files: true # สำคัญ: เพื่อไม่ให้ผลเทสรอบใหม่ไปลบของเก่าทิ้ง
+          destination_dir: ${{ github.run_id }} 
+          keep_files: true 
 
       - name: Upload Artifact (Backup)
         if: always() 
