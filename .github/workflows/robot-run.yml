@@ -56,7 +56,16 @@ jobs:
           --listener "influx_listener.py;https://a0a7-131-229-247-58.ngrok-free.app;-5BwTjLE1hJxif2RJbjuuiBt_W0q1_cWP9CI5AZcp9CwY595hXVHF7O-hA8gpzbO6wW7m54KkIVSdZ2-sy7IyA==;my-org;robot-metrics" \
           tests/**/*.robot
 
-      - name: Upload Test Results
+      - name: Deploy Test Results to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./results
+          destination_dir: ${{ github.run_id }} # เก็บแยกโฟลเดอร์ตาม ID ครั้งที่รัน
+          keep_files: true # สำคัญ: เพื่อไม่ให้ผลเทสรอบใหม่ไปลบของเก่าทิ้ง
+
+      - name: Upload Artifact (Backup)
         if: always() 
         uses: actions/upload-artifact@v4
         with:
